@@ -7,7 +7,7 @@
     <!-- Tailwind CSS 로드 -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Font (Inter) 로드 -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght400;500;700;800&display=swap" rel="stylesheet">
     <!-- Lucide 아이콘 로드 (React 버전이 아닌 UMD 버전으로 수정) -->
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
     
@@ -64,8 +64,15 @@
 
             <!-- 데스크탑 메뉴 -->
             <div class="hidden md:flex space-x-8 items-center">
-                <a href="#about" class="text-gray-600 hover:text-blue-600 font-medium transition-colors">소개</a>
-                <a href="#projects" class="text-gray-600 hover:text-blue-600 font-medium transition-colors">프로젝트</a>
+                <!-- '소개' 링크를 버튼 스타일로 변경 -->
+                <a href="#about" class="bg-blue-600 text-white px-5 py-2 rounded-full font-bold hover:bg-blue-700 transition-all shadow-md hover:shadow-lg">
+                    소개
+                </a>
+                <!-- '프로젝트' 링크를 버튼 스타일로 변경 -->
+                <a href="#projects" class="bg-blue-600 text-white px-5 py-2 rounded-full font-bold hover:bg-blue-700 transition-all shadow-md hover:shadow-lg">
+                    프로젝트
+                </a>
+                <!-- '연락하기' 링크 (기존 스타일 유지) -->
                 <a href="#contact" class="bg-blue-600 text-white px-5 py-2 rounded-full font-bold hover:bg-blue-700 transition-all shadow-md hover:shadow-lg">
                     연락하기
                 </a>
@@ -233,13 +240,15 @@
                         <div class="p-6">
                             <span class="text-sm font-medium text-blue-600">Web · HTML/CSS</span>
                             <h3 class="text-2xl font-bold text-gray-900 mt-2 mb-3">
-                                우리반 소개 페이지
+                                <!-- 변경된 부분: 우리반 소개 페이지 -> 내 소개 페이지 -->
+                                내 소개 페이지
                             </h3>
                             <p class="text-gray-600 mb-5">
                                 HTML과 CSS를 연습하기 위해 만든 첫 번째 반응형 웹페이지입니다.
                             </p>
                             <div class="flex space-x-4">
-                                <a href="#" class="font-medium text-blue-600 hover:text-blue-800 transition-colors flex items-center">
+                                <!-- 변경된 부분: GitHub 링크 업데이트 -->
+                                <a href="https://lsy091006-ui.github.io/myhomepage/" class="font-medium text-blue-600 hover:text-blue-800 transition-colors flex items-center">
                                     <i data-lucide="github" class="w-5 h-5 mr-2"></i>
                                     GitHub
                                 </a>
@@ -401,3 +410,4 @@
 
 </body>
 </html>
+
