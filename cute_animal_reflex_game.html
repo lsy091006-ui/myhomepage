@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>귀여운 동물 순발력 게임</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        .game-container {
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 800px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            padding: 20px;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e0e0e0;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .stat-item {
+            text-align: center;
+            min-width: 100px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #f5576c;
+        }
+
+        .game-area {
+            padding: 30px;
+            min-height: 400px;
+            position: relative;
+        }
+
+        .start-screen, .game-over-screen {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .start-screen h2, .game-over-screen h2 {
+            font-size: 32px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .start-screen p {
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .animal-box {
+            aspect-ratio: 1;
+            background: #f8f9fa;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 3px solid transparent;
+            position: relative;
+        }
+
+        .animal-box:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .animal-box.target {
+            animation: pulse 0.5s ease infinite;
+            border-color: #f5576c;
+            background: #fff5f7;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .animal-box.wrong {
+            animation: shake 0.3s ease;
+            background: #ffebee;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .animal-box.correct {
+            animation: bounce 0.4s ease;
+            background: #e8f5e9;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 25px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            box-shadow: 0 5px 15px rgba(245, 87, 108, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 20px rgba(245, 87, 108, 0.4);
+        }
+
+        .instruction {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: bold;
+            text-align: center;
+            min-height: 30px;
+        }
+
+        .timer-bar {
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .timer-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
+            transition: width 0.1s linear;
+        }
+
+        .combo {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #ffd700;
+            color: #333;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 18px;
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+            display: none;
+        }
+
+        .combo.show {
+            display: block;
+            animation: comboShow 0.5s ease;
+        }
+
+        @keyframes comboShow {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .score-popup {
+            position: absolute;
+            font-size: 24px;
+            font-weight: bold;
+            color: #f5576c;
+            pointer-events: none;
+            animation: scoreFloat 1s ease forwards;
+        }
+
+        @keyframes scoreFloat {
+            0% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .difficulty-select {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .difficulty-btn {
+            padding: 12px 25px;
+            border: 2px solid #f5576c;
+            background: white;
+            color: #f5576c;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .difficulty-btn:hover, .difficulty-btn.active {
+            background: #f5576c;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .game-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+            }
+
+            .animal-box {
+                font-size: 40px;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .stat-value {
+                font-size: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .game-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .difficulty-select {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="header">
+            <h1>🐾 귀여운 동물 순발력 게임 🐾</h1>
+        </div>
+
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-label">점수</div>
+                <div class="stat-value" id="score">0</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">레벨</div>
+                <div class="stat-value" id="level">1</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">생명</div>
+                <div class="stat-value" id="lives">❤️❤️❤️</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">최고기록</div>
+                <div class="stat-value" id="highScore">0</div>
+            </div>
+        </div>
+
+        <div class="game-area">
+            <div class="combo" id="combo">COMBO x<span id="comboCount">0</span></div>
+
+            <div class="start-screen" id="startScreen">
+                <h2>🎮 게임 방법</h2>
+                <p>
+                    ✨ 지시된 동물을 빠르게 클릭하세요!<br>
+                    ⏱️ 시간 내에 못 찾으면 생명이 줄어듭니다<br>
+                    🎯 레벨이 올라갈수록 더 빨라집니다<br>
+                    💫 연속으로 맞추면 콤보 보너스!<br>
+                    ❌ 틀린 동물을 클릭하면 페널티!
+                </p>
+                <div class="difficulty-select">
+                    <button class="difficulty-btn active" onclick="setDifficulty('easy')">쉬움</button>
+                    <button class="difficulty-btn" onclick="setDifficulty('normal')">보통</button>
+                    <button class="difficulty-btn" onclick="setDifficulty('hard')">어려움</button>
+                </div>
+                <br><br>
+                <button class="btn" onclick="startGame()">게임 시작</button>
+            </div>
+
+            <div class="game-screen hidden" id="gameScreen">
+                <div class="timer-bar">
+                    <div class="timer-fill" id="timerFill"></div>
+                </div>
+                <div class="instruction" id="instruction"></div>
+                <div class="game-grid" id="gameGrid"></div>
+            </div>
+
+            <div class="game-over-screen hidden" id="gameOverScreen">
+                <h2>🎉 게임 종료!</h2>
+                <p style="font-size: 24px; margin: 30px 0;">
+                    최종 점수: <strong id="finalScore">0</strong><br>
+                    최고 레벨: <strong id="finalLevel">1</strong>
+                </p>
+                <button class="btn" onclick="restartGame()">다시 시작</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const animals = ['🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼', '🐨', '🐯', '🦁', '🐮', '🐷', '🐸', '🐵', '🐔'];
+        
+        let score = 0;
+        let level = 1;
+        let lives = 3;
+        let combo = 0;
+        let highScore = 0;
+        let currentTarget = '';
+        let gameInterval = null;
+        let timerInterval = null;
+        let timeLeft = 100;
+        let difficulty = 'normal';
+        let baseTime = 3000;
+        let gridSize = 16;
+
+        const difficultySettings = {
+            easy: { baseTime: 4000, gridSize: 12, speedIncrease: 0.9 },
+            normal: { baseTime: 3000, gridSize: 16, speedIncrease: 0.85 },
+            hard: { baseTime: 2000, gridSize: 20, speedIncrease: 0.8 }
+        };
+
+        function setDifficulty(diff) {
+            difficulty = diff;
+            document.querySelectorAll('.difficulty-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        function startGame() {
+            const settings = difficultySettings[difficulty];
+            baseTime = settings.baseTime;
+            gridSize = settings.gridSize;
+            
+            score = 0;
+            level = 1;
+            lives = 3;
+            combo = 0;
+            updateStats();
+
+            document.getElementById('startScreen').classList.add('hidden');
+            document.getElementById('gameScreen').classList.remove('hidden');
+
+            nextRound();
+        }
+
+        function nextRound() {
+            if (lives <= 0) {
+                gameOver();
+                return;
+            }
+
+            clearInterval(timerInterval);
+            timeLeft = 100;
+            updateTimer();
+
+            const settings = difficultySettings[difficulty];
+            const roundTime = baseTime * Math.pow(settings.speedIncrease, level - 1);
+            const timerSpeed = roundTime / 100;
+
+            timerInterval = setInterval(() => {
+                timeLeft -= 1;
+                updateTimer();
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    lives--;
+                    combo = 0;
+                    updateStats();
+                    
+                    if (lives > 0) {
+                        setTimeout(nextRound, 1000);
+                    } else {
+                        gameOver();
+                    }
+                }
+            }, timerSpeed);
+
+            generateGrid();
+        }
+
+        function generateGrid() {
+            const grid = document.getElementById('gameGrid');
+            grid.innerHTML = '';
+
+            const settings = difficultySettings[difficulty];
+            const cols = Math.ceil(Math.sqrt(settings.gridSize));
+            grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+
+            const shuffled = [...animals].sort(() => Math.random() - 0.5);
+            const displayAnimals = shuffled.slice(0, settings.gridSize);
+            
+            currentTarget = displayAnimals[Math.floor(Math.random() * displayAnimals.length)];
+            
+            const animalNames = {
+                '🐶': '강아지', '🐱': '고양이', '🐭': '쥐', '🐹': '햄스터', 
+                '🐰': '토끼', '🦊': '여우', '🐻': '곰', '🐼': '판다', 
+                '🐨': '코알라', '🐯': '호랑이', '🦁': '사자', '🐮': '소', 
+                '🐷': '돼지', '🐸': '개구리', '🐵': '원숭이', '🐔': '닭'
+            };
+
+            document.getElementById('instruction').textContent = `${animalNames[currentTarget]}를 찾으세요!`;
+
+            displayAnimals.forEach(animal => {
+                const box = document.createElement('div');
+                box.className = 'animal-box';
+                box.textContent = animal;
+                box.onclick = () => checkAnswer(animal, box);
+                grid.appendChild(box);
+            });
+        }
+
+        function checkAnswer(selected, box) {
+            if (selected === currentTarget) {
+                box.classList.add('correct');
+                score += 10 * (1 + combo * 0.5);
+                combo++;
+                
+                if (combo >= 3) {
+                    document.getElementById('combo').classList.add('show');
+                    document.getElementById('comboCount').textContent = combo;
+                    setTimeout(() => {
+                        document.getElementById('combo').classList.remove('show');
+                    }, 1000);
+                }
+
+                showScorePopup(box, `+${Math.round(10 * (1 + combo * 0.5))}`);
+
+                if (score > highScore) {
+                    highScore = score;
+                }
+
+                level = Math.floor(score / 50) + 1;
+                updateStats();
+
+                clearInterval(timerInterval);
+                setTimeout(nextRound, 300);
+            } else {
+                box.classList.add('wrong');
+                lives--;
+                combo = 0;
+                score = Math.max(0, score - 5);
+                updateStats();
+                
+                setTimeout(() => {
+                    box.classList.remove('wrong');
+                }, 300);
+
+                if (lives <= 0) {
+                    clearInterval(timerInterval);
+                    setTimeout(gameOver, 500);
+                }
+            }
+        }
+
+        function showScorePopup(element, text) {
+            const popup = document.createElement('div');
+            popup.className = 'score-popup';
+            popup.textContent = text;
+            
+            const rect = element.getBoundingClientRect();
+            const container = document.getElementById('gameScreen').getBoundingClientRect();
+            
+            popup.style.left = (rect.left - container.left + rect.width / 2) + 'px';
+            popup.style.top = (rect.top - container.top) + 'px';
+            
+            document.getElementById('gameScreen').appendChild(popup);
+            
+            setTimeout(() => popup.remove(), 1000);
+        }
+
+        function updateTimer() {
+            document.getElementById('timerFill').style.width = timeLeft + '%';
+        }
+
+        function updateStats() {
+            document.getElementById('score').textContent = Math.round(score);
+            document.getElementById('level').textContent = level;
+            document.getElementById('lives').textContent = '❤️'.repeat(lives);
+            document.getElementById('highScore').textContent = Math.round(highScore);
+        }
+
+        function gameOver() {
+            clearInterval(timerInterval);
+            document.getElementById('gameScreen').classList.add('hidden');
+            document.getElementById('gameOverScreen').classList.remove('hidden');
+            document.getElementById('finalScore').textContent = Math.round(score);
+            document.getElementById('finalLevel').textContent = level;
+        }
+
+        function restartGame() {
+            document.getElementById('gameOverScreen').classList.add('hidden');
+            document.getElementById('startScreen').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
