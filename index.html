@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>이소연 - 코딩 포트폴리오</title>
+    <!-- Tailwind CSS 로드 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Font (Inter) 로드 -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide 아이콘 로드 (React 버전이 아닌 UMD 버전으로 수정) -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    
+    <style>
+        /* 기본 폰트 설정 */
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-moz-osx-smoothing: grayscale;
+        }
+        
+        /* 활성 필터 버튼 스타일 */
+        .filter-btn.active {
+            background-color: #2563EB; /* bg-blue-600 */
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        /* 프로젝트 카드 호버 효과 */
+        .project-card {
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        .project-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        /* 모바일 메뉴 부드럽게 보이기/숨기기 */
+        #mobile-menu {
+            transition: max-height 0.3s ease-out;
+            max-height: 0;
+            overflow: hidden;
+        }
+        #mobile-menu.open {
+            max-height: 500px; /* 메뉴 항목을 포함할 충분한 높이 */
+        }
+
+        /* 스크롤을 부드럽게 */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body class="bg-blue-50 text-gray-800">
+
+    <!-- ==== 헤더 (네비게이션) ==== -->
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <!-- 로고/이름 -->
+            <a href="#" class="text-3xl font-extrabold text-blue-700">
+                <!-- 이름이 '이소연'으로 변경되었습니다. -->
+                Developer 이소연
+            </a>
+
+            <!-- 데스크탑 메뉴 -->
+            <div class="hidden md:flex space-x-8 items-center">
+                <a href="#about" class="text-gray-600 hover:text-blue-600 font-medium transition-colors">소개</a>
+                <a href="#projects" class="text-gray-600 hover:text-blue-600 font-medium transition-colors">프로젝트</a>
+                <a href="#contact" class="bg-blue-600 text-white px-5 py-2 rounded-full font-bold hover:bg-blue-700 transition-all shadow-md hover:shadow-lg">
+                    연락하기
+                </a>
+            </div>
+
+            <!-- 모바일 메뉴 버튼 (햄버거) -->
+            <div class="md:hidden">
+                <button id="mobile-menu-button" class="text-blue-700">
+                    <i data-lucide="menu" class="w-7 h-7"></i>
+                </button>
+            </div>
+        </nav>
+
+        <!-- 모바일 메뉴 (숨겨진 상태) -->
+        <div id="mobile-menu" class="md:hidden bg-white shadow-lg">
+            <a href="#about" class="block px-6 py-3 text-gray-700 hover:bg-blue-50 transition-colors">소개</a>
+            <a href="#projects" class="block px-6 py-3 text-gray-700 hover:bg-blue-50 transition-colors">프로젝트</a>
+            <a href="#contact" class="block px-6 py-3 text-gray-700 hover:bg-blue-50 transition-colors">연락하기</a>
+        </div>
+    </header>
+
+    <!-- ==== 메인 ==== -->
+    <main>
+
+        <!-- ==== 1. 히어로 섹션 (소개) ==== -->
+        <section class="bg-gradient-to-r from-blue-600 to-blue-800 text-white relative overflow-hidden">
+            <div class="container mx-auto px-6 py-24 md:py-32 flex flex-col md:flex-row items-center relative z-10">
+                <!-- 텍스트 영역 -->
+                <div class="md:w-1/2 text-center md:text-left mb-10 md:mb-0">
+                    <span class="text-blue-200 font-semibold text-lg">명신여자고등학교 1학년</span>
+                    <h1 class="text-4xl md:text-6xl font-extrabold mt-2 mb-6 leading-tight">
+                        <!-- 이름이 '이소연'으로 변경되었습니다. -->
+                        안녕하세요, 이소연입니다.
+                    </h1>
+                    <p class="text-xl md:text-2xl text-blue-100 font-light mb-10">
+                        코딩으로 세상을 바꾸는<br class="hidden md:block">
+                        <span class="font-medium">앱과 챗봇</span>을 만듭니다.
+                    </p>
+                    <a href="#projects" class="bg-white text-blue-700 font-bold px-8 py-4 rounded-full text-lg shadow-xl hover:bg-gray-100 transition-all transform hover:scale-105">
+                        내 프로젝트 보기
+                    </a>
+                </div>
+                
+                <!-- 이미지/애니메이션 영역 -->
+                <div class="md:w-1/2 flex justify-center">
+                    <!-- 학생의 사진이나 관련 이미지로 변경하세요 -->
+                    <img src="https://placehold.co/400x400/FFFFFF/2563EB?text=Profile+Pic&font=inter" alt="프로필 사진" class="rounded-full border-8 border-white/50 shadow-2xl w-64 h-64 md:w-80 md:h-80 object-cover">
+                </div>
+            </div>
+        </section>
+
+        <!-- ==== 2. 나에 대해 (About Me) ==== -->
+        <section id="about" class="py-20 md:py-28 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="grid md:grid-cols-2 gap-16 items-center">
+                    <!-- 학교 이미지나 코딩하는 이미지로 변경하세요 -->
+                    <div class="rounded-lg overflow-hidden shadow-2xl">
+                        <img src="https://placehold.co/600x450/3B82F6/FFFFFF?text=My+Passion&font=inter" alt="코딩 이미지" class="w-full h-full object-cover">
+                    </div>
+                    
+                    <div>
+                        <span class="text-blue-600 font-semibold">About Me</span>
+                        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mt-2 mb-6">
+                            코딩에 진심인 학생
+                        </h2>
+                        <p class="text-lg text-gray-600 mb-6 leading-relaxed">
+                            <!-- 이 부분을 학생의 실제 이야기로 채워주세요 -->
+                            저는 명신여자고등학교 1학년에 재학 중입니다. 코딩은 제 가장 큰 취미이자 열정입니다. 사용자의 문제를 해결하고 즐거움을 주는 실용적인 앱과 똑똑한 챗봇을 만드는 것이 제 목표입니다. 매일 새로운 기술을 배우며 성장하고 있습니다!
+                        </p>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4">관심 기술 스택</h3>
+                        <div class="flex flex-wrap gap-3">
+                            <span class="bg-blue-100 text-blue-800 px-4 py-2 rounded-full font-medium">Python</span>
+                            <span class="bg-blue-100 text-blue-800 px-4 py-2 rounded-full font-medium">JavaScript</span>
+                            <span class="bg-blue-100 text-blue-800 px-4 py-2 rounded-full font-medium">HTML & CSS</span>
+                            <span class="bg-blue-100 text-blue-800 px-4 py-2 rounded-full font-medium">AI / Chatbot</span>
+                            <span class="bg-gray-200 text-gray-700 px-4 py-2 rounded-full font-medium">React (학습중)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==== 3. 프로젝트 ==== -->
+        <section id="projects" class="py-20 md:py-28 bg-blue-50">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <span class="text-blue-600 font-semibold">Portfolio</span>
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mt-2 mb-6">
+                        My Projects 🚀
+                    </h2>
+                    <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                        제가 직접 만들고 고민한 프로젝트들입니다.
+                    </p>
+                </div>
+
+                <!-- 프로젝트 필터 버튼 -->
+                <div id="project-filters" class="flex flex-wrap justify-center gap-3 mb-12">
+                    <button class="filter-btn active px-6 py-2 rounded-full font-semibold transition-all" data-filter="all">
+                        전체 (All)
+                    </button>
+                    <button class="filter-btn px-6 py-2 rounded-full font-semibold transition-all" data-filter="app">
+                        앱 (Apps)
+                    </button>
+                    <button class="filter-btn px-6 py-2 rounded-full font-semibold transition-all" data-filter="chatbot">
+                        챗봇 (Chatbots)
+                    </button>
+                    <button class="filter-btn px-6 py-2 rounded-full font-semibold transition-all" data-filter="web">
+                        웹 (Web)
+                    </button>
+                </div>
+
+                <!-- 프로젝트 그리드 -->
+                <div id="project-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+
+                    <!-- 프로젝트 카드 1 (챗봇) -->
+                    <div class="project-card bg-white rounded-xl shadow-lg overflow-hidden" data-category="chatbot">
+                        <!-- 프로젝트 이미지 -->
+                        <img src="https://placehold.co/400x300/1E40AF/FFFFFF?text=Chatbot+Project&font=inter" alt="챗봇 프로젝트" class="w-full h-56 object-cover">
+                        <div class="p-6">
+                            <span class="text-sm font-medium text-blue-600">AI · Python</span>
+                            <h3 class="text-2xl font-bold text-gray-900 mt-2 mb-3">
+                                <!-- 프로젝트 제목 수정 -->
+                                학교 생활 도우미 챗봇
+                            </h3>
+                            <p class="text-gray-600 mb-5">
+                                <!-- 프로젝트 설명 수정 -->
+                                학교 급식, 일정, 공지사항을 알려주는 간단한 챗봇입니다.
+                            </p>
+                            <div class="flex space-x-4">
+                                <a href="#" class="font-medium text-blue-600 hover:text-blue-800 transition-colors flex items-center">
+                                    <i data-lucide="github" class="w-5 h-5 mr-2"></i>
+                                    GitHub
+                                </a>
+                                <a href="#" class="font-medium text-gray-500 hover:text-blue-800 transition-colors flex items-center">
+                                    <i data-lucide="external-link" class="w-5 h-5 mr-2"></i>
+                                    Demo
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 프로젝트 카드 2 (앱) -->
+                    <div class="project-card bg-white rounded-xl shadow-lg overflow-hidden" data-category="app">
+                        <img src="https://placehold.co/400x300/3B82F6/FFFFFF?text=App+Project&font=inter" alt="앱 프로젝트" class="w-full h-56 object-cover">
+                        <div class="p-6">
+                            <span class="text-sm font-medium text-blue-600">App · Python</span>
+                            <h3 class="text-2xl font-bold text-gray-900 mt-2 mb-3">
+                                일정 관리 데스크탑 앱
+                            </h3>
+                            <p class="text-gray-600 mb-5">
+                                Tkinter를 사용하여 만든 간단한 To-Do 리스트 및 일정 관리 앱입니다.
+                            </p>
+                            <div class="flex space-x-4">
+                                <a href="#" class="font-medium text-blue-600 hover:text-blue-800 transition-colors flex items-center">
+                                    <i data-lucide="github" class="w-5 h-5 mr-2"></i>
+                                    GitHub
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 프로젝트 카드 3 (웹) -->
+                    <div class="project-card bg-white rounded-xl shadow-lg overflow-hidden" data-category="web">
+                        <img src="https://placehold.co/400x300/60A5FA/FFFFFF?text=Web+Project&font=inter" alt="웹 프로젝트" class="w-full h-56 object-cover">
+                        <div class="p-6">
+                            <span class="text-sm font-medium text-blue-600">Web · HTML/CSS</span>
+                            <h3 class="text-2xl font-bold text-gray-900 mt-2 mb-3">
+                                우리반 소개 페이지
+                            </h3>
+                            <p class="text-gray-600 mb-5">
+                                HTML과 CSS를 연습하기 위해 만든 첫 번째 반응형 웹페이지입니다.
+                            </p>
+                            <div class="flex space-x-4">
+                                <a href="#" class="font-medium text-blue-600 hover:text-blue-800 transition-colors flex items-center">
+                                    <i data-lucide="github" class="w-5 h-5 mr-2"></i>
+                                    GitHub
+                                </a>
+                                <a href="#" class="font-medium text-gray-500 hover:text-blue-800 transition-colors flex items-center">
+                                    <i data-lucide="external-link" class="w-5 h-5 mr-2"></i>
+                                    Demo
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 여기에 프로젝트 카드를 더 추가하세요 -->
+                    <!-- 
+                    <div class="project-card bg-white rounded-xl shadow-lg overflow-hidden" data-category="app">
+                        ... (프로젝트 4 내용) ...
+                    </div> 
+                    -->
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ==== 4. 연락처 (Contact) ==== -->
+        <section id="contact" class="py-20 md:py-28 bg-white text-center">
+            <div class="container mx-auto px-6">
+                <i data-lucide="send" class="w-16 h-16 text-blue-600 mx-auto mb-6"></i>
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+                    Get In Touch!
+                </h2>
+                <p class="text-lg text-gray-600 max-w-lg mx-auto mb-8">
+                    제 작업에 대해 더 궁금한 점이 있거나,
+                    함께 코딩 이야기를 나누고 싶다면 언제든지 연락주세요!
+                </p>
+                
+                <!-- 여기에 이메일 주소를 넣으세요 -->
+                <a href="mailto:lsy091006@gmail.com" class="text-2xl font-semibold text-blue-600 hover:text-blue-800 transition-colors hover:underline">
+                    lsy091006@gmail.com
+                </a>
+
+                <div class="flex justify-center space-x-6 mt-10">
+                    <!-- 여기에 GitHub 링크를 넣으세요 -->
+                    <a href="#" class="text-gray-500 hover:text-blue-700 transition-colors" title="GitHub">
+                        <i data-lucide="github" class="w-8 h-8"></i>
+                    </a>
+                    <!-- 여기에 블로그나 다른 SNS 링크를 넣으세요 -->
+                    <a href="#" class="text-gray-500 hover:text-blue-700 transition-colors" title="Blog">
+                        <i data-lucide="rss" class="w-8 h-8"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ==== 풋터 ==== -->
+    <footer class="bg-blue-900 text-blue-200 py-8">
+        <div class="container mx-auto px-6 text-center">
+            <p class="text-lg font-semibold mb-2">
+                <!-- 이름이 '이소연'으로 변경되었습니다. -->
+                이소연 | 명신여자고등학교 1학년
+            </p>
+            <p class="text-sm text-blue-300">
+                &copy; <span id="current-year"></span>. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+
+    <!-- ==== JavaScript ==== -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // --- 1. Lucide 아이콘 활성화 ---
+            try {
+                lucide.createIcons();
+            } catch (error) {
+                console.error('Lucide 아이콘 로드 실패:', error);
+            }
+
+            // --- 2. 현재 연도 풋터에 자동 삽입 ---
+            const yearSpan = document.getElementById('current-year');
+            if (yearSpan) {
+                yearSpan.textContent = new Date().getFullYear();
+            }
+
+            // --- 3. 모바일 메뉴 토글 ---
+            const menuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const menuIcon = menuButton.querySelector('i');
+
+            if (menuButton && mobileMenu && menuIcon) {
+                menuButton.addEventListener('click', function() {
+                    mobileMenu.classList.toggle('open');
+                    
+                    // 아이콘 변경 (Menu <-> X)
+                    if (mobileMenu.classList.contains('open')) {
+                        menuIcon.setAttribute('data-lucide', 'x');
+                    } else {
+                        menuIcon.setAttribute('data-lucide', 'menu');
+                    }
+                    lucide.createIcons(); // 아이콘 다시 그리기
+                });
+
+                // 모바일 메뉴 링크 클릭 시 메뉴 닫기
+                mobileMenu.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        mobileMenu.classList.remove('open');
+                        menuIcon.setAttribute('data-lucide', 'menu');
+                        lucide.createIcons();
+                    });
+                });
+            }
+
+            // --- 4. 프로젝트 필터링 ---
+            const filterButtons = document.querySelectorAll('#project-filters .filter-btn');
+            const projectGrid = document.getElementById('project-grid');
+            const projectCards = projectGrid ? projectGrid.querySelectorAll('.project-card') : [];
+
+            if (filterButtons.length > 0 && projectCards.length > 0) {
+                filterButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        const filterValue = this.getAttribute('data-filter');
+
+                        // (a) 버튼 활성 스타일 변경
+                        filterButtons.forEach(btn => btn.classList.remove('active'));
+                        this.classList.add('active');
+
+                        // (b) 프로젝트 카드 필터링
+                        projectCards.forEach(card => {
+                            const cardCategory = card.getAttribute('data-category');
+                            
+                            // 부드러운 효과를 위해 opacity와 scale 사용
+                            card.style.transition = 'opacity 0.3s ease, transform 0.3s ease, max-height 0.5s ease, margin 0.5s ease, padding 0.5s ease';
+
+                            if (filterValue === 'all' || filterValue === cardCategory) {
+                                card.style.opacity = '1';
+                                card.style.transform = 'scale(1)';
+                                card.style.maxHeight = '1000px'; // 충분한 높이
+                                card.style.overflow = 'visible';
+                                card.style.margin = ''; // 원래 마진 (gap)
+                                card.style.padding = ''; // 원래 패딩
+                                card.style.visibility = 'visible';
+                            } else {
+                                card.style.opacity = '0';
+                                card.style.transform = 'scale(0.9)';
+                                card.style.maxHeight = '0';
+                                card.style.overflow = 'hidden';
+                                card.style.margin = '0'; // 마진 제거
+                                card.style.padding = '0'; // 패딩 제거
+                                card.style.visibility = 'hidden';
+                            }
+                        });
+                    });
+                });
+            }
+
+        });
+    </script>
+
+</body>
+</html>
